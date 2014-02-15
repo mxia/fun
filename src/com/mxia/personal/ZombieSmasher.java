@@ -111,7 +111,6 @@ public class ZombieSmasher {
 	    }
 	}
 
-	System.out.println(MessageFormat.format("Case #{0}: {1}", caseNumber,
-		count));
+	out.println(MessageFormat.format("Case #{0}: {1}", caseNumber, count));
     }
 }
