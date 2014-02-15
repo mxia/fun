@@ -79,7 +79,8 @@ public class ZombieSmasher {
 		if (index2 == index1) {
 		    continue;
 		}
-		// time to get from (x[i], y[i]) to (x[j], y[j])
+		// time to get from (x[i], y[i]) to (x[j], y[j]) after a zombie
+		// was just smashed
 		int moveTime = Math.max(
 			TIME_RECHARGE,
 			Math.max(Math.abs(x[index1] - x[index2]),
@@ -87,11 +88,13 @@ public class ZombieSmasher {
 				* TIME_MOVE_ADJ);
 		for (int j = 0; j < zCount; ++j) {
 		    if (minTime[index1][j] == Integer.MAX_VALUE) {
+			// already not reachable
 			continue;
 		    }
 		    int timeToNextZ = minTime[index1][j] + moveTime;
 		    if (timeToNextZ < minTime[index2][j + 1]
 			    && timeToNextZ <= time[index2] + TIME_ZOMBIE_LIFE) {
+			// found a faster time to kill the next zombie
 			minTime[index2][j + 1] = Math.max(timeToNextZ,
 				time[index2]);
 		    }
@@ -99,8 +102,9 @@ public class ZombieSmasher {
 	    }
 	}
 
-	// matrix is built; now find how many columns (minTime[][j]) have non
-	// default values, indicating z[j] is reachable
+	// matrix is built, with minTime[i][j] representing the minimum time to
+	// kill z[i] after already smashing j zombies. Now find the right-most
+	// column containing at least one non-default value
 	int count = 0;
 	for (int j = 0; j < zCount; ++j) {
 	    for (int i = 0; i < zCount; ++i) {
